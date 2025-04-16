@@ -3,6 +3,7 @@ package scanner
 import (
 	"crypto/sha256"
 	"fmt"
+	"github.com/schollz/progressbar/v3"
 	"io"
 	"os"
 )
@@ -28,13 +29,18 @@ func FindDuplicates(root string) (map[string][]string, error) {
 		return nil, err
 	}
 
+	bar := progressbar.Default(int64(len(files)), "Hashing files")
+
 	dupeMap := make(map[string][]string)
 	for _, file := range files {
 		hash, err := hashFile(file)
-		if err != nil {
-			continue
+		if err == nil {
+			dupeMap[hash] = append(dupeMap[hash], file)
 		}
-		dupeMap[hash] = append(dupeMap[hash], file)
+		err = bar.Add(1)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return dupeMap, nil
