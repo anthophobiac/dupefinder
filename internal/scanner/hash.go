@@ -23,8 +23,8 @@ func hashFile(path string) (string, error) {
 	return fmt.Sprintf("%x", h.Sum(nil)), nil
 }
 
-func FindDuplicates(root string) (map[string][]string, error) {
-	files, err := WalkFiles(root)
+func FindDuplicates(root string, includeExt, excludeExt []string) (map[string][]string, error) {
+	files, err := WalkFiles(root, includeExt, excludeExt)
 	if err != nil {
 		return nil, err
 	}
