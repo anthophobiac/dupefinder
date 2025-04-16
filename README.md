@@ -12,10 +12,11 @@ A fast and simple command-line tool to scan directories and find **duplicate fil
 
 ##  Installation
 
+As a prerequisite, you should have the [latest Go version](https://go.dev/dl/) installed.
 ```bash
 git clone https://github.com/anthophobiac/dupefinder.git
 cd dupefinder
-go build -o dupefinder
+go install
 ```
 
 ## Usage
