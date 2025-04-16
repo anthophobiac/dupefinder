@@ -4,6 +4,7 @@ import (
 	"dupefinder/internal/scanner"
 	"encoding/json"
 	"fmt"
+	"github.com/fatih/color"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -22,7 +23,7 @@ var scanCmd = &cobra.Command{
 
 		dupes, err := scanner.FindDuplicates(path, includeExt, excludeExt)
 		if err != nil {
-			fmt.Println("Error:", err)
+			color.Red("Error:", err)
 			os.Exit(1)
 		}
 
@@ -35,26 +36,26 @@ var scanCmd = &cobra.Command{
 
 		if outputFile != "" {
 			if len(filtered) == 0 {
-				fmt.Println("🎉 No duplicate files found.")
+				color.Green("🎉 No duplicate files found.")
 			} else {
 				if err := saveResultsToFile(filtered, outputFile); err != nil {
-					fmt.Println("Error writing output file:", err)
+					color.Red("Error writing output file: %v", err)
 					os.Exit(1)
 				}
-				fmt.Printf("📝 %d duplicate group(s) written to %s\n", len(filtered), outputFile)
+				color.Green("📝 %d duplicate group(s) written to %s", len(filtered), outputFile)
 			}
 			return
 		}
 
 		if len(filtered) == 0 {
-			fmt.Println("🎉 No duplicate files found.")
+			color.Green("🎉 No duplicate files found.")
 			return
 		}
 
 		for hash, files := range filtered {
 			fmt.Printf("Duplicate group (%s):\n", hash)
 			for _, f := range files {
-				fmt.Println("  ", f)
+				color.Cyan("  %s", f)
 			}
 			fmt.Println()
 		}
